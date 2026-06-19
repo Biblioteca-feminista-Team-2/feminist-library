@@ -1,0 +1,61 @@
+### Maven ###
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.iws
+*.ipr
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Build folders ###
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+
+### Logs ###
+*.log
+
+### Environment variables ###
+.env
+.env.local
+
+### Database files ###
+*.sql.bak
+*.db
+
+### Mac OS ###
+.DS_Store
+
+### Windows ###
+Thumbs.db
+
+### Kotlin ###
+.kotlin/
