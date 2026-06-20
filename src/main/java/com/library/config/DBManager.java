@@ -3,10 +3,14 @@ package com.library.config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class DBManager {
-    private static final String URL = "jdbc:postgresql://localhost:5432/feminist_library";
-    private static final String USER = "postgres";
-    private static final String PASS = "zulash2020";
+    public static Dotenv dotenv = Dotenv.load();
+
+    private static final String URL = dotenv.get("DB_URL");
+    private static final String USER = dotenv.get("DB_USER");
+    private static final String PASS = dotenv.get("DB_PASSWORD");
     private static Connection connection;
 
     public static Connection getConnection(){
