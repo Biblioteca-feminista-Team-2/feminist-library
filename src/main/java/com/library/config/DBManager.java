@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 public class DBManager {
     private static final String URL = "jdbc:postgresql://localhost:5432/feminist_library";
     private static final String USER = "postgres";
-    private static final String PASS = "02062628Nagicome26";
+    private static final String PASS = "zulash2020";
     private static Connection connection;
 
     public static Connection getConnection(){
