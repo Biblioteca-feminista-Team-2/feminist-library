@@ -1,5 +1,9 @@
 package com.library.repository;
 
-public class BookRepository {
-    
+import com.library.model.Book;
+
+public interface BookRepository {
+
+    void createBook(Book book);
+
 }

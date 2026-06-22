@@ -1,5 +1,15 @@
 package com.library.repository;
 
-public class BookRepositoryImpl {
+import com.library.model.Book;
+
+public class BookRepositoryImpl implements BookRepository {
+
+    @Override
+    public void createBook(Book book) {
+       
+    }
+
+  
+
     
 }
