@@ -32,6 +32,7 @@ public class BookController {
 
     }
     public void deleteBook(int id) {
+        bookRepository.deleteBook(id);
     }
 
     public List<Book> searchByTitle(String title) {

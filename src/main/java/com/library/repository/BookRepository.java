@@ -10,7 +10,7 @@ public interface BookRepository {
 
     // void updateBook(Book book);
 
-    // void deleteBook(String id);
+    void deleteBook(int id);
 
     List<Book> findAllBooks();
 
