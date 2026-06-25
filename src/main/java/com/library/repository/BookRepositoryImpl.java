@@ -26,7 +26,7 @@ public class BookRepositoryImpl implements BookRepository {
         String sqlCheckAuthor = "SELECT id FROM author WHERE name = ?";
         String sqlInsertAuthor = "INSERT INTO author (name) VALUES (?)";
         String sqlInsertBookAuthor = "INSERT INTO book_author (book_id, author_id) VALUES (?, ?)";
-    
+
         String sqlCheckGenre = "SELECT id FROM genre WHERE name = ?";
         String sqlInsertGenre = "INSERT INTO genre (name) VALUES (?)";
         String sqlInsertBookGenre = "INSERT INTO book_genre (book_id, genre_id) VALUES (?, ?)";
@@ -43,185 +43,216 @@ public class BookRepositoryImpl implements BookRepository {
             stmn.executeUpdate();
 
             ResultSet rsBook = stmn.getGeneratedKeys();
-        int bookId = 0;
-        if (rsBook.next()) {
-            bookId = rsBook.getInt(1);
-        }
-        for (Author author : book.getAuthors()) {
-            int authorId = 0;
-
-            // ¿Existe el autor?
-            PreparedStatement stmnCheckAuth = connection.prepareStatement(sqlCheckAuthor);
-            stmnCheckAuth.setString(1, author.getName());
-            ResultSet rsAuth = stmnCheckAuth.executeQuery();
-
-            if (rsAuth.next()) {
-                // Si existe, tomamos su ID
-                authorId = rsAuth.getInt("id");
-            } else {
-                // Si NO existe, lo creamos
-                PreparedStatement stmnInsAuth = connection.prepareStatement(sqlInsertAuthor, Statement.RETURN_GENERATED_KEYS);
-                stmnInsAuth.setString(1, author.getName());
-                stmnInsAuth.executeUpdate();
-                ResultSet rsNewAuth = stmnInsAuth.getGeneratedKeys();
-                if (rsNewAuth.next()) {
-                    authorId = rsNewAuth.getInt(1);
-                }
+            int bookId = 0;
+            if (rsBook.next()) {
+                bookId = rsBook.getInt(1);
             }
+            for (Author author : book.getAuthors()) {
+                int authorId = 0;
 
-            PreparedStatement stmnLinkAuth = connection.prepareStatement(sqlInsertBookAuthor);
-            stmnLinkAuth.setInt(1, bookId);
-            stmnLinkAuth.setInt(2, authorId);
-            stmnLinkAuth.executeUpdate();
-        }
-        for (Genre genre : book.getGenres()) {
-            int genreId = 0;
+                // ¿Existe el autor?
+                PreparedStatement stmnCheckAuth = connection.prepareStatement(sqlCheckAuthor);
+                stmnCheckAuth.setString(1, author.getName());
+                ResultSet rsAuth = stmnCheckAuth.executeQuery();
 
-            PreparedStatement stmnCheckGen = connection.prepareStatement(sqlCheckGenre);
-            stmnCheckGen.setString(1, genre.getName());
-            ResultSet rsGen = stmnCheckGen.executeQuery();
-
-            if (rsGen.next()) {
-                // Si existe, tomamos su ID
-                genreId = rsGen.getInt("id");
-            } else {
-                // Si NO existe, lo creamos
-                PreparedStatement stmnInsGen = connection.prepareStatement(sqlInsertGenre, Statement.RETURN_GENERATED_KEYS);
-                stmnInsGen.setString(1, genre.getName());
-                stmnInsGen.executeUpdate();
-                ResultSet rsNewGen = stmnInsGen.getGeneratedKeys();
-                if (rsNewGen.next()) {
-                    genreId = rsNewGen.getInt(1);
+                if (rsAuth.next()) {
+                    // Si existe, tomamos su ID
+                    authorId = rsAuth.getInt("id");
+                } else {
+                    // Si NO existe, lo creamos
+                    PreparedStatement stmnInsAuth = connection.prepareStatement(sqlInsertAuthor,
+                            Statement.RETURN_GENERATED_KEYS);
+                    stmnInsAuth.setString(1, author.getName());
+                    stmnInsAuth.executeUpdate();
+                    ResultSet rsNewAuth = stmnInsAuth.getGeneratedKeys();
+                    if (rsNewAuth.next()) {
+                        authorId = rsNewAuth.getInt(1);
+                    }
                 }
-            }
 
-            PreparedStatement stmnLinkGen = connection.prepareStatement(sqlInsertBookGenre);
-            stmnLinkGen.setInt(1, bookId);
-            stmnLinkGen.setInt(2, genreId);
-            stmnLinkGen.executeUpdate();
-        }
+                PreparedStatement stmnLinkAuth = connection.prepareStatement(sqlInsertBookAuthor);
+                stmnLinkAuth.setInt(1, bookId);
+                stmnLinkAuth.setInt(2, authorId);
+                stmnLinkAuth.executeUpdate();
+            }
+            for (Genre genre : book.getGenres()) {
+                int genreId = 0;
+
+                PreparedStatement stmnCheckGen = connection.prepareStatement(sqlCheckGenre);
+                stmnCheckGen.setString(1, genre.getName());
+                ResultSet rsGen = stmnCheckGen.executeQuery();
+
+                if (rsGen.next()) {
+                    // Si existe, tomamos su ID
+                    genreId = rsGen.getInt("id");
+                } else {
+                    // Si NO existe, lo creamos
+                    PreparedStatement stmnInsGen = connection.prepareStatement(sqlInsertGenre,
+                            Statement.RETURN_GENERATED_KEYS);
+                    stmnInsGen.setString(1, genre.getName());
+                    stmnInsGen.executeUpdate();
+                    ResultSet rsNewGen = stmnInsGen.getGeneratedKeys();
+                    if (rsNewGen.next()) {
+                        genreId = rsNewGen.getInt(1);
+                    }
+                }
+
+                PreparedStatement stmnLinkGen = connection.prepareStatement(sqlInsertBookGenre);
+                stmnLinkGen.setInt(1, bookId);
+                stmnLinkGen.setInt(2, genreId);
+                stmnLinkGen.executeUpdate();
+            }
 
             System.out.println("Libro creado con exito");
         } catch (Exception e) {
             try {
-            if (connection != null) connection.rollback();
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            System.out.println("No se ha podido crear el libro");
-            System.out.println(e.getMessage());
-        } finally {
-            DBManager.closeConnection();
+                if (connection != null)
+                    connection.rollback();
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+                System.out.println("No se ha podido crear el libro");
+                System.out.println(e.getMessage());
+            } finally {
+                DBManager.closeConnection();
+            }
         }
-    }
 
-       
     }
 
     @Override
     public List<Book> findAllBooks() {
-    List<Book> bookList = new ArrayList<>();
+        List<Book> bookList = new ArrayList<>();
 
-    String sqlBooks = "SELECT * FROM book";
-    String sqlAuthors = "SELECT a.* FROM author a JOIN book_author ba ON a.id = ba.author_id WHERE ba.book_id = ?";
-    String sqlGenres = "SELECT g.* FROM genre g JOIN book_genre bg ON g.id = bg.genre_id WHERE bg.book_id = ?";
+        String sqlBooks = "SELECT * FROM book";
+        String sqlAuthors = "SELECT a.* FROM author a JOIN book_author ba ON a.id = ba.author_id WHERE ba.book_id = ?";
+        String sqlGenres = "SELECT g.* FROM genre g JOIN book_genre bg ON g.id = bg.genre_id WHERE bg.book_id = ?";
 
-    try {
-        connection = DBManager.getConnection(); 
-        stmn = connection.prepareStatement(sqlBooks);
-        ResultSet rsBooks = stmn.executeQuery();
+        try {
+            connection = DBManager.getConnection();
+            stmn = connection.prepareStatement(sqlBooks);
+            ResultSet rsBooks = stmn.executeQuery();
 
-        while (rsBooks.next()) {
-            Book book = Book.builder()
-                    .id(rsBooks.getInt("id"))
-                    .isbnCode(rsBooks.getString("isbn_code"))
-                    .title(rsBooks.getString("title"))
-                    .description(rsBooks.getString("description"))
-                    .publicationDate(rsBooks.getDate("publication_date").toLocalDate())
-                    .editorial(rsBooks.getString("editorial"))
-                    .pages(rsBooks.getInt("pages"))
-                    .idState(rsBooks.getBoolean("Id_state"))
-                    .build();
+            while (rsBooks.next()) {
+                Book book = Book.builder()
+                        .id(rsBooks.getInt("id"))
+                        .isbnCode(rsBooks.getString("isbn_code"))
+                        .title(rsBooks.getString("title"))
+                        .description(rsBooks.getString("description"))
+                        .publicationDate(rsBooks.getDate("publication_date").toLocalDate())
+                        .editorial(rsBooks.getString("editorial"))
+                        .pages(rsBooks.getInt("pages"))
+                        .idState(rsBooks.getBoolean("Id_state"))
+                        .build();
 
-            bookList.add(book);
+                bookList.add(book);
+            }
+
+            rsBooks.close();
+            stmn.close();
+
+            for (Book book : bookList) {
+                // --- Cargar Autores ---
+                PreparedStatement stmnAuth = connection.prepareStatement(sqlAuthors);
+                stmnAuth.setInt(1, book.getId());
+                ResultSet rsAuth = stmnAuth.executeQuery();
+
+                List<Author> authorList = new ArrayList<>();
+                while (rsAuth.next()) {
+                    Author author = new Author(rsAuth.getString("name"));
+                    author.setId(rsAuth.getInt("id")); 
+                    authorList.add(author);
+                }
+                book.setAuthors(authorList);
+                rsAuth.close();
+                stmnAuth.close();
+
+                // --- Cargar Géneros ---
+                PreparedStatement stmnGen = connection.prepareStatement(sqlGenres);
+                stmnGen.setInt(1, book.getId());
+                ResultSet rsGen = stmnGen.executeQuery();
+
+                List<Genre> genreList = new ArrayList<>();
+                while (rsGen.next()) {
+                    Genre genre = new Genre(rsGen.getString("name"));
+                    genre.setId(rsGen.getInt("id")); 
+                    genreList.add(genre);
+                }
+                book.setGenres(genreList);
+                rsGen.close();
+                stmnGen.close();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al obtener la lista de libros");
+            System.out.println(e.getMessage());
+        } finally {
+            DBManager.closeConnection();
         }
 
-        rsBooks.close();
-        stmn.close();
+        return bookList;
+    }
 
-        // 2. Ahora el bucle FOR corre de manera independiente y limpia
-        for (Book book : bookList) {
-            // --- Cargar Autores ---
-            PreparedStatement stmnAuth = connection.prepareStatement(sqlAuthors);
-            stmnAuth.setInt(1, book.getId());
-            ResultSet rsAuth = stmnAuth.executeQuery();
-            
-            List<Author> authorList = new ArrayList<>();
-            while (rsAuth.next()) {
-                Author author = new Author(rsAuth.getString("name"));
-                author.setId(rsAuth.getInt("id")); // Asegúrate de que 'setId' exista en Author.java
-                authorList.add(author);
-            }
-            book.setAuthors(authorList);
-            rsAuth.close();
-            stmnAuth.close();
+    // @Override
+    // public void updateBook(Book book) {
 
-            // --- Cargar Géneros ---
-            PreparedStatement stmnGen = connection.prepareStatement(sqlGenres);
-            stmnGen.setInt(1, book.getId());
-            ResultSet rsGen = stmnGen.executeQuery();
-            
-            List<Genre> genreList = new ArrayList<>();
-            while (rsGen.next()) {
-                Genre genre = new Genre(rsGen.getString("name"));
-                genre.setId(rsGen.getInt("id")); // Asegúrate de que 'setId' exista en Genre.java
-                genreList.add(genre);
-            }
-            book.setGenres(genreList);
-            rsGen.close();
-            stmnGen.close();
+    // }
+
+@Override
+public void deleteBook(int id) {
+    String sqlDeleteBookAuthor = "DELETE FROM book_author WHERE book_id = ?";
+    String sqlDeleteBookGenre  = "DELETE FROM book_genre WHERE book_id = ?";
+    String sqlDeleteBook       = "DELETE FROM book WHERE id = ?";
+
+    try {
+        connection = DBManager.getConnection();
+
+        stmn = connection.prepareStatement(sqlDeleteBookAuthor);
+        stmn.setInt(1, id);
+        stmn.executeUpdate();
+
+        stmn = connection.prepareStatement(sqlDeleteBookGenre);
+        stmn.setInt(1, id);
+        stmn.executeUpdate();
+
+        
+        stmn = connection.prepareStatement(sqlDeleteBook);
+        stmn.setInt(1, id);
+        int rows = stmn.executeUpdate();
+
+        if (rows > 0) {
+            System.out.println("Libro eliminado con éxito");
+        } else {
+            System.out.println("No se encontró un libro con ID: " + id);
         }
 
     } catch (Exception e) {
-        System.out.println("Error al obtener la lista de libros");
+        System.out.println("Error al eliminar el libro");
         System.out.println(e.getMessage());
     } finally {
         DBManager.closeConnection();
     }
 
-    return bookList;
 }
 
+    // @Override
+    // public void findByGenreBook(String id) {
+    // // TODO Auto-generated method stub
+    // throw new UnsupportedOperationException("Unimplemented method
+    // 'findByGenreBook'");
+    // }
 
-// @Override
-// public void updateBook(Book book) {
+    // @Override
+    // public void findByAuthorBook(String id) {
+    // // TODO Auto-generated method stub
+    // throw new UnsupportedOperationException("Unimplemented method
+    // 'findByAuthorBook'");
+    // }
 
-// }
-
-// @Override
-// public void deleteBook(String id) {
-// // TODO Auto-generated method stub
-// throw new UnsupportedOperationException("Unimplemented method 'deleteBook'");
-// }
-
-// @Override
-// public void findByGenreBook(String id) {
-// // TODO Auto-generated method stub
-// throw new UnsupportedOperationException("Unimplemented method
-// 'findByGenreBook'");
-// }
-
-// @Override
-// public void findByAuthorBook(String id) {
-// // TODO Auto-generated method stub
-// throw new UnsupportedOperationException("Unimplemented method
-// 'findByAuthorBook'");
-// }
-
-// @Override
-// public void findByTitleBook(String id) {
-// // TODO Auto-generated method stub
-// throw new UnsupportedOperationException("Unimplemented method
-// 'findByTitleBook'");
-// }
+    // @Override
+    // public void findByTitleBook(String id) {
+    // // TODO Auto-generated method stub
+    // throw new UnsupportedOperationException("Unimplemented method
+    // 'findByTitleBook'");
+    // }
 
 }
