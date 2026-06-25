@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
 import static com.library.config.util.ConsoleColors.*;
 
 public class ManageBooksView {
@@ -21,18 +20,21 @@ public class ManageBooksView {
         this.bookController = bookController;
     }
 
-   
     public void render(Scanner scanner) {
         boolean inSubMenu = true;
         while (inSubMenu) {
             System.out.println("\n" + BRIGHT_GREEN + "┌── GESTIONAR LIBROS ──────────────────────────┐" + RESET);
-            System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "1" + RESET + "] Ver todos los libros                        " + BRIGHT_GREEN + "│" + RESET);
-            System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "2" + RESET + "] Añadir nuevo libro                          " + BRIGHT_GREEN + "│" + RESET);
-            System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "3" + RESET + "] " + BRIGHT_YELLOW + "Editar libro existente" + RESET + "               " + BRIGHT_GREEN + "│" + RESET);
-            System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "4" + RESET + "] " + RED + "Eliminar libro" + RESET + "                       " + BRIGHT_GREEN + "│" + RESET);
-            System.out.println(BRIGHT_GREEN + "│" + RESET + ="] ↩ Volver al menú principal  " + BRIGHT_GREEN + = "] ↩ Volver al menú principal                 " +
-            System.out.println(BRIGHT_GREEN += "] ↩ Volver al menú principal                 " +
-            System.out.println(BRIGHT_GREEN += "] ↩ Volver al menú principal                 "
+            System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "1" + RESET
+                    + "] Ver todos los libros                        " + BRIGHT_GREEN + "│" + RESET);
+            System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "2" + RESET
+                    + "] Añadir nuevo libro                          " + BRIGHT_GREEN + "│" + RESET);
+            System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "3" + RESET + "] " + BRIGHT_YELLOW
+                    + "Editar libro existente" + RESET + "               " + BRIGHT_GREEN + "│" + RESET);
+            System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "4" + RESET + "] " + RED
+                    + "Eliminar libro" + RESET + "                       " + BRIGHT_GREEN + "│" + RESET);
+
+        System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "0" + RESET
+                    + "] ↩ Volver al menú principal                 " + BRIGHT_GREEN + "│" + RESET);
 
             System.out.println(GREEN + "└──────────────────────────────────────────────┘" + RESET);
             System.out.print(RED + "Selecciona una opción: " + RESET);
@@ -41,18 +43,18 @@ public class ManageBooksView {
             switch (subOption) {
                 case "1":
                     System.out.println(CYAN + "\n--- Catálogo de Libros ---" + RESET);
-                   
+
                     break;
                 case "2":
-                    createBookForm(scanner); 
+                    createBookForm(scanner);
                     break;
                 case "3":
                     System.out.println(YELLOW + "\n--- Editar Libro Existing ---" + RESET);
-                    
+
                     break;
                 case "4":
                     System.out.println(RED + "\n--- Eliminar Libro ---" + RESET);
-                    
+
                     break;
                 case "0":
                     inSubMenu = false;
@@ -64,10 +66,10 @@ public class ManageBooksView {
     }
 
     public void createBookForm(Scanner scanner) {
-        System.out.println( GREEN + "\n┌──────────────────────────────────────────────┐" + RESET);
+        System.out.println(GREEN + "\n┌──────────────────────────────────────────────┐" + RESET);
         System.out.println(GREEN + "│ 📝 FORMULARIO: AÑADIR NUEVO LIBRO            │" + RESET);
         System.out.println(GREEN + "└──────────────────────────────────────────────┘" + RESET);
-        
+
         System.out.print(CYAN + "Introduce el ISBN: " + RESET);
         String isbn = scanner.nextLine();
 
@@ -85,18 +87,19 @@ public class ManageBooksView {
         String editorial = scanner.nextLine();
 
         System.out.print(CYAN + "Introduce las páginas: " + RESET);
-        
+
         int pages = Integer.parseInt(scanner.nextLine());
 
         System.out.print(CYAN + "¿El libro está disponible? (true/false): " + RESET);
         boolean idState = Boolean.parseBoolean(scanner.nextLine());
 
         // 1. CAPTURAR UNO O VARIOS AUTORES (Separados por comas)
-        System.out.print(CYAN + "Introduce el/los autores (separados por comas, ej: Virginia Woolf, Mary Shelley): " + RESET);
+        System.out.print(
+                CYAN + "Introduce el/los autores (separados por comas, ej: Virginia Woolf, Mary Shelley): " + RESET);
         String authorsInput = scanner.nextLine();
         List<Author> authorList = new ArrayList<>();
         for (String name : authorsInput.split(",")) {
-            authorList.add(new Author(name.trim())); 
+            authorList.add(new Author(name.trim()));
         }
 
         // 2. CAPTURAR UNO O VARIOS GÉNEROS (Separados por comas)
@@ -116,15 +119,14 @@ public class ManageBooksView {
                 .editorial(editorial)
                 .pages(pages)
                 .idState(idState)
-                .author(authorList) 
-                .genres(genreList)   
+                .author(authorList)
+                .genres(genreList)
                 .build();
 
         // 4. ENVIAR AL CONTROLADOR (Lógica que usará tu equipo)
         System.out.println(YELLOW + "\nProcesando envío al sistema..." + RESET);
         bookController.createBook(book);
-        
+
         System.out.println(GREEN + "[ÉXITO] ¡El libro ha sido guardado correctamente!" + RESET);
     }
 }
-

@@ -10,13 +10,14 @@ import com.library.model.Book;
 import com.library.repository.BookRepositoryImpl;
 import com.library.controller.BookController;
 import com.library.repository.BookRepository;
-import com.view.ConsoleView;
+import com.view.MainMenuView;
+
 public class App {
     public static void main(String[] args) {
 
         BookRepository bookRepository = new BookRepositoryImpl();
         BookController bookController = new BookController(bookRepository);
-        ConsoleView bookView = new ConsoleView(bookController);
+        MainMenuView bookView = new MainMenuView(bookController);
         Scanner scanner = new Scanner(System.in);
 
         bookView.createBook(scanner);

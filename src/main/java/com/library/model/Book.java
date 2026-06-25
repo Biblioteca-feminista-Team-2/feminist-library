@@ -6,12 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builderpublic Object authors(List<Author> authorList) {
+@Builderpublic  {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'authors'");
     }
 public class Book {
-    private final int id;
+    private  int id;
     private String isbnCode;
     private String title;
     private String description;
