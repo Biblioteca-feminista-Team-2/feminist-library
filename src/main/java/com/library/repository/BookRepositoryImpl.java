@@ -16,8 +16,14 @@ import com.library.model.Book;
 import com.library.model.Genre;
 
 public class BookRepositoryImpl implements BookRepository {
+    public BookRepositoryImpl() {
+    }
 
-    Connection connection;
+    public BookRepositoryImpl(Connection connection) {
+        this.connection = connection;
+    }
+
+    private Connection connection;
     PreparedStatement stmn;
     Statement statement;
 
@@ -32,7 +38,9 @@ public class BookRepositoryImpl implements BookRepository {
         String sqlInsertGenre = "INSERT INTO genre (name) VALUES (?)";
         String sqlInsertBookGenre = "INSERT INTO book_genre (book_id, genre_id) VALUES (?, ?)";
         try {
-            connection = DBManager.getConnection();
+            if (this.connection == null) {
+                connection = DBManager.getConnection();
+            }
             connection.setAutoCommit(false);
             stmn = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmn.setString(1, book.getIsbnCode());
@@ -130,7 +138,9 @@ public class BookRepositoryImpl implements BookRepository {
         String sqlGenres = "SELECT g.* FROM genre g JOIN book_genre bg ON g.id = bg.genre_id WHERE bg.book_id = ?";
 
         try {
-            connection = DBManager.getConnection();
+            if (this.connection == null) {
+                connection = DBManager.getConnection();
+            }
             stmn = connection.prepareStatement(sqlBooks);
             ResultSet rsBooks = stmn.executeQuery();
 
@@ -205,8 +215,9 @@ public class BookRepositoryImpl implements BookRepository {
         String sqlDeleteBook = "DELETE FROM book WHERE id = ?";
 
         try {
-            connection = DBManager.getConnection();
-
+            if (this.connection == null) {
+                connection = DBManager.getConnection();
+            }
             stmn = connection.prepareStatement(sqlDeleteBookAuthor);
             stmn.setInt(1, id);
             stmn.executeUpdate();
@@ -277,7 +288,9 @@ public class BookRepositoryImpl implements BookRepository {
                 "JOIN genre g ON bg.genre_id = g.id " +
                 "WHERE LOWER(g.name) LIKE LOWER(?)";
         try {
-            connection = DBManager.getConnection();
+            if (this.connection == null) {
+                connection = DBManager.getConnection();
+            }
             stmn = connection.prepareStatement(sql);
             stmn.setString(1, "%" + genreName + "%");
             ResultSet rs = stmn.executeQuery();
@@ -316,7 +329,9 @@ public class BookRepositoryImpl implements BookRepository {
                 "JOIN author a ON ba.author_id = a.id " +
                 "WHERE LOWER(a.name) LIKE LOWER(?)";
         try {
-            connection = DBManager.getConnection();
+            if (this.connection == null) {
+                connection = DBManager.getConnection();
+            }
             stmn = connection.prepareStatement(sql);
             stmn.setString(1, "%" + authorName + "%");
             ResultSet rs = stmn.executeQuery();
@@ -352,7 +367,9 @@ public class BookRepositoryImpl implements BookRepository {
         List<Book> bookList = new ArrayList<>();
         String sql = "SELECT * FROM book WHERE LOWER(title) LIKE LOWER(?)";
         try {
-            connection = DBManager.getConnection();
+            if (this.connection == null) {
+                connection = DBManager.getConnection();
+            }
             stmn = connection.prepareStatement(sql);
             stmn.setString(1, "%" + title + "%");
             ResultSet rs = stmn.executeQuery();
