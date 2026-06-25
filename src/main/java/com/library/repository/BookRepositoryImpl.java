@@ -195,7 +195,6 @@ public class BookRepositoryImpl implements BookRepository {
 
     // @Override
     // public void updateBook(Book book) {
-
     // }
 
     @Override
@@ -382,5 +381,4 @@ public class BookRepositoryImpl implements BookRepository {
         }
         return bookList;
     }
-
 }
