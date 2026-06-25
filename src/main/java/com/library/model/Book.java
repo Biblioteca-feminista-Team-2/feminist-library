@@ -1,17 +1,15 @@
 package com.library.model;
-import java.time.LocalDate;
-import java.util.List;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builderpublic  {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'authors'");
-    }
+@Builder
 public class Book {
-    private  int id;
+    private int id;
     private String isbnCode;
     private String title;
     private String description;
@@ -20,4 +18,9 @@ public class Book {
     private int pages;
     private Boolean idState;
 
+    @Builder.Default
+    private List<Author> authors = new ArrayList<>();
+
+    @Builder.Default
+    private List<Genre> genres = new ArrayList<>();
 }

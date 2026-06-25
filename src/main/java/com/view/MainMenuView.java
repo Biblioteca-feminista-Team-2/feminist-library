@@ -35,10 +35,10 @@ public class MainMenuView {
                     break;
                 case "0":
                     running = false;
-                    System.out.println(RED + "\n[🚪] Exiting the system. Goodbye!" + RESET);
+                    System.out.println(RED + "\n[🚪] Saliendo del sistema. ¡Adiós!" + RESET);
                     break;
                 default:
-                    System.out.println(RED + "\n[!] Invalid option. Please select 1, 2, or 0." + RESET);
+                    System.out.println(RED + "\n[!] Opción no válida. Selecciona 1, 2 o 0." + RESET);
             }
         }
         scanner.close();

@@ -1,5 +1,7 @@
 package com.library.repository;
 
+import java.util.List;
+
 import com.library.model.Book;
 
 public interface BookRepository {
@@ -8,15 +10,15 @@ public interface BookRepository {
 
     // void updateBook(Book book);
 
-    // void deleteBook(String id);
+    void deleteBook(int id);
 
-    // void findAllBook(String id);// devuelve todos sin filtrar
+    List<Book> findAllBooks();
 
-    // void findByGenreBook(String id); //devuelve todos sin filtrar
+    List<Book> findByGenreBook(String genreName);
 
-    // void findByAuthorBook(String id);
+    List<Book> findByAuthorBook(String authorName);
 
-    // void findByTitleBook(String id);
+    List<Book> findByTitleBook(String title);
 
 
 

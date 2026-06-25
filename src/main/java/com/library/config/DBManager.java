@@ -11,7 +11,7 @@ public class DBManager {
 
     private static final String URL = dotenv.get("DB_URL");
     private static final String USER = dotenv.get("DB_USER");
-    private static final String PASS = dotenv.get("DB_PASSWORD");
+    private static final String PASS = dotenv.get("DB_PASS");
     private static Connection connection;
 
     public static Connection getConnection() throws SQLException {
