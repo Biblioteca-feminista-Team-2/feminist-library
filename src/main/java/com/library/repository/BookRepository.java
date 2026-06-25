@@ -1,5 +1,7 @@
 package com.library.repository;
 
+import java.util.List;
+
 import com.library.model.Book;
 
 public interface BookRepository {
@@ -10,7 +12,7 @@ public interface BookRepository {
 
     // void deleteBook(String id);
 
-    // void findAllBook(String id);// devuelve todos sin filtrar
+    List<Book> findAllBooks();
 
     // void findByGenreBook(String id); //devuelve todos sin filtrar
 

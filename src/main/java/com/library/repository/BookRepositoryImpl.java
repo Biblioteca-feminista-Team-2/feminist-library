@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.library.config.DBManager;
 import com.library.model.Author;
@@ -17,7 +19,6 @@ public class BookRepositoryImpl implements BookRepository {
     Connection connection;
     PreparedStatement stmn;
     Statement statement;
-
 
     @Override
     public void createBook(Book book) {
@@ -111,46 +112,116 @@ public class BookRepositoryImpl implements BookRepository {
         } finally {
             DBManager.closeConnection();
         }
+    }
 
        
     }
 
-    // @Override
-    // public void updateBook(Book book) {
-       
-    // }
+    @Override
+    public List<Book> findAllBooks() {
+    List<Book> bookList = new ArrayList<>();
 
-    // @Override
-    // public void deleteBook(String id) {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'deleteBook'");
-    // }
+    String sqlBooks = "SELECT * FROM book";
+    String sqlAuthors = "SELECT a.* FROM author a JOIN book_author ba ON a.id = ba.author_id WHERE ba.book_id = ?";
+    String sqlGenres = "SELECT g.* FROM genre g JOIN book_genre bg ON g.id = bg.genre_id WHERE bg.book_id = ?";
 
-    // @Override
-    // public void findAllBook(String id) {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'findAllBook'");
-    // }
+    try {
+        connection = DBManager.getConnection(); 
+        stmn = connection.prepareStatement(sqlBooks);
+        ResultSet rsBooks = stmn.executeQuery();
 
-    // @Override
-    // public void findByGenreBook(String id) {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'findByGenreBook'");
-    // }
+        while (rsBooks.next()) {
+            Book book = Book.builder()
+                    .id(rsBooks.getInt("id"))
+                    .isbnCode(rsBooks.getString("isbn_code"))
+                    .title(rsBooks.getString("title"))
+                    .description(rsBooks.getString("description"))
+                    .publicationDate(rsBooks.getDate("publication_date").toLocalDate())
+                    .editorial(rsBooks.getString("editorial"))
+                    .pages(rsBooks.getInt("pages"))
+                    .idState(rsBooks.getBoolean("Id_state"))
+                    .build();
 
-    // @Override
-    // public void findByAuthorBook(String id) {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'findByAuthorBook'");
-    // }
+            bookList.add(book);
+        }
 
-    // @Override
-    // public void findByTitleBook(String id) {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'findByTitleBook'");
-    // }
+        rsBooks.close();
+        stmn.close();
 
-  
+        // 2. Ahora el bucle FOR corre de manera independiente y limpia
+        for (Book book : bookList) {
+            // --- Cargar Autores ---
+            PreparedStatement stmnAuth = connection.prepareStatement(sqlAuthors);
+            stmnAuth.setInt(1, book.getId());
+            ResultSet rsAuth = stmnAuth.executeQuery();
+            
+            List<Author> authorList = new ArrayList<>();
+            while (rsAuth.next()) {
+                Author author = new Author(rsAuth.getString("name"));
+                author.setId(rsAuth.getInt("id")); // Asegúrate de que 'setId' exista en Author.java
+                authorList.add(author);
+            }
+            book.setAuthors(authorList);
+            rsAuth.close();
+            stmnAuth.close();
+
+            // --- Cargar Géneros ---
+            PreparedStatement stmnGen = connection.prepareStatement(sqlGenres);
+            stmnGen.setInt(1, book.getId());
+            ResultSet rsGen = stmnGen.executeQuery();
+            
+            List<Genre> genreList = new ArrayList<>();
+            while (rsGen.next()) {
+                Genre genre = new Genre(rsGen.getString("name"));
+                genre.setId(rsGen.getInt("id")); // Asegúrate de que 'setId' exista en Genre.java
+                genreList.add(genre);
+            }
+            book.setGenres(genreList);
+            rsGen.close();
+            stmnGen.close();
+        }
+
+    } catch (Exception e) {
+        System.out.println("Error al obtener la lista de libros");
+        System.out.println(e.getMessage());
+    } finally {
+        DBManager.closeConnection();
     }
-    
+
+    return bookList;
+}
+
+
+// @Override
+// public void updateBook(Book book) {
+
+// }
+
+// @Override
+// public void deleteBook(String id) {
+// // TODO Auto-generated method stub
+// throw new UnsupportedOperationException("Unimplemented method 'deleteBook'");
+// }
+
+// @Override
+// public void findByGenreBook(String id) {
+// // TODO Auto-generated method stub
+// throw new UnsupportedOperationException("Unimplemented method
+// 'findByGenreBook'");
+// }
+
+// @Override
+// public void findByAuthorBook(String id) {
+// // TODO Auto-generated method stub
+// throw new UnsupportedOperationException("Unimplemented method
+// 'findByAuthorBook'");
+// }
+
+// @Override
+// public void findByTitleBook(String id) {
+// // TODO Auto-generated method stub
+// throw new UnsupportedOperationException("Unimplemented method
+// 'findByTitleBook'");
+// }
+
 }
