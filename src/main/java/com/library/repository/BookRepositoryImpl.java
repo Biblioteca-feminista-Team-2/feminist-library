@@ -3,6 +3,7 @@ package com.library.repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -15,11 +16,19 @@ public class BookRepositoryImpl implements BookRepository {
 
     Connection connection;
     PreparedStatement stmn;
+    Statement statement;
+
 
     @Override
     public void createBook(Book book) {
         String sql = "INSERT INTO book (isbn_code, title, description, publication_date, editorial, pages, id_state) VALUES(?,?,?,?,?,?,?)";
-
+        String sqlCheckAuthor = "SELECT id FROM author WHERE name = ?";
+        String sqlInsertAuthor = "INSERT INTO author (name) VALUES (?)";
+        String sqlInsertBookAuthor = "INSERT INTO book_author (book_id, author_id) VALUES (?, ?)";
+    
+        String sqlCheckGenre = "SELECT id FROM genre WHERE name = ?";
+        String sqlInsertGenre = "INSERT INTO genre (name) VALUES (?)";
+        String sqlInsertBookGenre = "INSERT INTO book_genre (book_id, genre_id) VALUES (?, ?)";
         try {
             connection = DBManager.getConnection();
             stmn = connection.prepareStatement(sql);
@@ -32,7 +41,7 @@ public class BookRepositoryImpl implements BookRepository {
             stmn.setBoolean(7, book.getIdState());
             stmn.executeUpdate();
 
-            ResultSet rsBook = stmnBook.getGeneratedKeys();
+            ResultSet rsBook = stmn.getGeneratedKeys();
         int bookId = 0;
         if (rsBook.next()) {
             bookId = rsBook.getInt(1);
@@ -142,6 +151,6 @@ public class BookRepositoryImpl implements BookRepository {
     // }
 
   
-
+    }
     
 }
