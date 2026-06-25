@@ -20,6 +20,7 @@ public class App {
         Scanner scanner = new Scanner(System.in);
 
         bookView.createBook(scanner);
+        bookView.deleteBook(scanner);
 
     }
 

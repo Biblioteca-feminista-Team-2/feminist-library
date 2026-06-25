@@ -57,5 +57,11 @@ public class ConsoleView {
         bookController.createBook(book);
 
     }
+    public void deleteBook(Scanner scanner) {
+    System.out.print("Introduce el ID del libro a eliminar: ");
+    int id = scanner.nextInt();
+    scanner.nextLine(); 
+    bookController.deleteBook(id);
+}
 
 }
