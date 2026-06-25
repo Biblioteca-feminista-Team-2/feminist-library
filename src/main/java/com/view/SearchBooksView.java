@@ -23,10 +23,10 @@ public class SearchBooksView {
         boolean inSubMenu = true;
         while (inSubMenu) {
             System.out.println("\n" + BRIGHT_CYAN + "┌── BUSCAR LIBROS ─────────────────────────────┐" + RESET);
-            System.out.println(BRIGHT_CYAN + "│" + RESET + " [" + BRIGHT_CYAN + "1" + RESET + "] Buscar por título                           " + BRIGHT_CYAN + "│" + RESET);
-            System.out.println(BRIGHT_CYAN + "│" + RESET + " [" + BRIGHT_CYAN + "2" + RESET + "] Buscar por autora                           " + BRIGHT_CYAN + "│" + RESET);
-            System.out.println(BRIGHT_CYAN + "│" + RESET + " [" + BRIGHT_CYAN + "3" + RESET + "] Buscar por género literario                 " + BRIGHT_CYAN + "│" + RESET);
-            System.out.println(BRIGHT_CYAN + "│" + RESET + " [" + BRIGHT_CYAN + "0" + RESET + "] ↩ Volver al menú principal                 " + BRIGHT_CYAN + "│" + RESET);
+            System.out.println(BRIGHT_CYAN + "│" + RESET + " [" + BRIGHT_CYAN + "1" + RESET + "] Buscar por título                        " + BRIGHT_CYAN + "│" + RESET);
+            System.out.println(BRIGHT_CYAN + "│" + RESET + " [" + BRIGHT_CYAN + "2" + RESET + "] Buscar por autora                        " + BRIGHT_CYAN + "│" + RESET);
+            System.out.println(BRIGHT_CYAN + "│" + RESET + " [" + BRIGHT_CYAN + "3" + RESET + "] Buscar por género literario              " + BRIGHT_CYAN + "│" + RESET);
+            System.out.println(BRIGHT_CYAN + "│" + RESET + " [" + BRIGHT_CYAN + "0" + RESET + "] ↩ Volver al menú principal               " + BRIGHT_CYAN + "│" + RESET);
             System.out.println(BRIGHT_CYAN + "└──────────────────────────────────────────────┘" + RESET);
             System.out.print(BRIGHT_PURPLE + "Selecciona una opción: " + RESET);
 

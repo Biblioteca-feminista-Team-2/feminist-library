@@ -48,7 +48,7 @@ public class MainMenuView {
     private void showWelcomeAndMenu() {
         // Encabezado de Bienvenida (Rosa/Magenta)
         System.out.println("\n" + BRIGHT_PURPLE + "┌──────────────────────────────────────────────┐" + RESET);
-        System.out.println(BRIGHT_PURPLE + "│ 📚 " + BOLD +  "BIBLIOTECA FEMINISTA DEL BARRIO" + RESET + BRIGHT_PURPLE + " 📚   │" + RESET);
+        System.out.println(BRIGHT_PURPLE + "│ 📚 " + BOLD +  "BIBLIOTECA FEMINISTA DEL BARRIO" + RESET + BRIGHT_PURPLE + " 📚        │" + RESET);
         System.out.println(BRIGHT_PURPLE + "│ Bienvenido de nuevo, Administradora          │" + RESET);
         System.out.println(BRIGHT_PURPLE + "└──────────────────────────────────────────────┘" + RESET);
 
@@ -56,7 +56,7 @@ public class MainMenuView {
         System.out.println(YELLOW + "┌── MENÚ PRINCIPAL ────────────────────────────┐" + RESET);
         System.out.println(YELLOW + "│" + RESET + " [" + BRIGHT_YELLOW + "1" + RESET + "] 📄 " + BRIGHT_GREEN + "Gestionar libros" + RESET + " ► submenú            " + BRIGHT_YELLOW + "│" + RESET);
         System.out.println(YELLOW + "│" + RESET + " [" + BRIGHT_YELLOW + "2" + RESET + "] 🔍 " + BRIGHT_CYAN + "Buscar libros" + RESET + " ► submenú               " + BRIGHT_YELLOW + "│" + RESET);
-        System.out.println(YELLOW + "│" + RESET + " [" + BRIGHT_YELLOW + "0" + RESET + "] 🚪 Salir                                  " + BRIGHT_YELLOW + "│" + RESET);
+        System.out.println(YELLOW + "│" + RESET + " [" + BRIGHT_YELLOW + "0" + RESET + "] 🚪 Salir                                 " + BRIGHT_YELLOW + "│" + RESET);
         System.out.println(YELLOW + "└──────────────────────────────────────────────┘" + RESET);
         System.out.print(BRIGHT_YELLOW + "Selecciona una opción: " + RESET);
     }

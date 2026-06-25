@@ -26,14 +26,14 @@ public class ManageBooksView {
         while (inSubMenu) {
             System.out.println("\n" + BRIGHT_GREEN + "┌── GESTIONAR LIBROS ──────────────────────────┐" + RESET);
             System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "1" + RESET
-                    + "] Ver todos los libros                        " + BRIGHT_GREEN + "│" + RESET);
+                    + "] Ver todos los libros                     " + BRIGHT_GREEN + "│" + RESET);
             System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "2" + RESET
-                    + "] Añadir nuevo libro                          " + BRIGHT_GREEN + "│" + RESET);
+                    + "] Añadir nuevo libro                       " + BRIGHT_GREEN + "│" + RESET);
             System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "3" + RESET + "] " + RED
-                    + "Eliminar libro" + RESET + "                         " + BRIGHT_GREEN + "│" + RESET);
+                    + "Eliminar libro" + RESET + "                           " + BRIGHT_GREEN + "│" + RESET);
 
             System.out.println(BRIGHT_GREEN + "│" + RESET + " [" + BRIGHT_GREEN + "0" + RESET
-                    + "] ↩ Volver al menú principal                 " + BRIGHT_GREEN + "│" + RESET);
+                    + "] ↩ Volver al menú principal               " + BRIGHT_GREEN + "│" + RESET);
 
             System.out.println(GREEN + "└──────────────────────────────────────────────┘" + RESET);
             System.out.print(RED + "Selecciona una opción: " + RESET);
