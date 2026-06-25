@@ -3,6 +3,7 @@ package com.library.repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -233,26 +234,153 @@ public void deleteBook(int id) {
     }
 
 }
+private void loadAuthorsAndGenres(Connection connection, List<Book> bookList) throws SQLException {
+    String sqlAuthors = "SELECT a.* FROM author a JOIN book_author ba ON a.id = ba.author_id WHERE ba.book_id = ?";
+    String sqlGenres = "SELECT g.* FROM genre g JOIN book_genre bg ON g.id = bg.genre_id WHERE bg.book_id = ?";
 
-    // @Override
-    // public void findByGenreBook(String id) {
-    // // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method
-    // 'findByGenreBook'");
-    // }
+    for (Book book : bookList) {
+        // Cargar Autores
+        try (PreparedStatement stmnAuth = connection.prepareStatement(sqlAuthors)) {
+            stmnAuth.setInt(1, book.getId());
+            try (ResultSet rsAuth = stmnAuth.executeQuery()) {
+                List<Author> authorList = new ArrayList<>();
+                while (rsAuth.next()) {
+                    Author author = new Author(rsAuth.getString("name"));
+                    author.setId(rsAuth.getInt("id"));
+                    authorList.add(author);
+                }
+                book.setAuthors(authorList);
+            }
+        }
 
-    // @Override
-    // public void findByAuthorBook(String id) {
-    // // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method
-    // 'findByAuthorBook'");
-    // }
+        // Cargar Géneros
+        try (PreparedStatement stmnGen = connection.prepareStatement(sqlGenres)) {
+            stmnGen.setInt(1, book.getId());
+            try (ResultSet rsGen = stmnGen.executeQuery()) {
+                List<Genre> genreList = new ArrayList<>();
+                while (rsGen.next()) {
+                    Genre genre = new Genre(rsGen.getString("name"));
+                    genre.setId(rsGen.getInt("id"));
+                    genreList.add(genre);
+                }
+                book.setGenres(genreList);
+            }
+        }
+    }
+}
 
-    // @Override
-    // public void findByTitleBook(String id) {
-    // // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method
-    // 'findByTitleBook'");
-    // }
+    @Override
+public List<Book> findByGenreBook(String genreName) {
+    List<Book> bookList = new ArrayList<>();
+    String sql = "SELECT b.* FROM book b " +
+                 "JOIN book_genre bg ON b.id = bg.book_id " +
+                 "JOIN genre g ON bg.genre_id = g.id " +
+                 "WHERE LOWER(g.name) LIKE LOWER(?)";
+    try {
+        connection = DBManager.getConnection();
+        stmn = connection.prepareStatement(sql);
+        stmn.setString(1, "%" + genreName + "%");
+        ResultSet rs = stmn.executeQuery();
+
+        while (rs.next()) {
+            Book book = Book.builder()
+                    .id(rs.getInt("id"))
+                    .isbnCode(rs.getString("isbn_code"))
+                    .title(rs.getString("title"))
+                    .description(rs.getString("description"))
+                    .publicationDate(rs.getDate("publication_date").toLocalDate())
+                    .editorial(rs.getString("editorial"))
+                    .pages(rs.getInt("pages"))
+                    .idState(rs.getBoolean("Id_state"))
+                    .build();
+            bookList.add(book);
+        }
+        rs.close();
+        stmn.close();
+
+        loadAuthorsAndGenres(connection, bookList);
+
+    } catch (Exception e) {
+        System.out.println("Error al buscar libros por género: " + e.getMessage());
+    } finally {
+        DBManager.closeConnection();
+    }
+    return bookList;
+}
+
+@Override
+public List<Book> findByAuthorBook(String authorName) {
+    List<Book> bookList = new ArrayList<>();
+    String sql = "SELECT b.* FROM book b " +
+                 "JOIN book_author ba ON b.id = ba.book_id " +
+                 "JOIN author a ON ba.author_id = a.id " +
+                 "WHERE LOWER(a.name) LIKE LOWER(?)";
+    try {
+        connection = DBManager.getConnection();
+        stmn = connection.prepareStatement(sql);
+        stmn.setString(1, "%" + authorName + "%");
+        ResultSet rs = stmn.executeQuery();
+
+        while (rs.next()) {
+            Book book = Book.builder()
+                    .id(rs.getInt("id"))
+                    .isbnCode(rs.getString("isbn_code"))
+                    .title(rs.getString("title"))
+                    .description(rs.getString("description"))
+                    .publicationDate(rs.getDate("publication_date").toLocalDate())
+                    .editorial(rs.getString("editorial"))
+                    .pages(rs.getInt("pages"))
+                    .idState(rs.getBoolean("Id_state"))
+                    .build();
+            bookList.add(book);
+        }
+        rs.close();
+        stmn.close();
+
+        loadAuthorsAndGenres(connection, bookList);
+
+    } catch (Exception e) {
+        System.out.println("Error al buscar libros por autor: " + e.getMessage());
+    } finally {
+        DBManager.closeConnection();
+    }
+    return bookList;
+}
+
+@Override
+public List<Book> findByTitleBook(String title) {
+    List<Book> bookList = new ArrayList<>();
+    String sql = "SELECT * FROM book WHERE LOWER(title) LIKE LOWER(?)";
+    try {
+        connection = DBManager.getConnection();
+        stmn = connection.prepareStatement(sql);
+        stmn.setString(1, "%" + title + "%");
+        ResultSet rs = stmn.executeQuery();
+
+        while (rs.next()) {
+            Book book = Book.builder()
+                    .id(rs.getInt("id"))
+                    .isbnCode(rs.getString("isbn_code"))
+                    .title(rs.getString("title"))
+                    .description(rs.getString("description"))
+                    .publicationDate(rs.getDate("publication_date").toLocalDate())
+                    .editorial(rs.getString("editorial"))
+                    .pages(rs.getInt("pages"))
+                    .idState(rs.getBoolean("Id_state"))
+                    .build();
+            bookList.add(book);
+        }
+        rs.close();
+        stmn.close();
+
+        loadAuthorsAndGenres(connection, bookList);
+
+    } catch (Exception e) {
+        System.out.println("Error al buscar libros por título: " + e.getMessage());
+    } finally {
+        DBManager.closeConnection();
+    }
+    return bookList;
+}
 
 }

@@ -36,16 +36,15 @@ public class BookController {
     }
 
     public List<Book> searchByTitle(String title) {
-        return new ArrayList<>();
+        return bookRepository.findByTitleBook(title);
     }
 
     public List<Book> searchByAuthor(String authorName) {
-        return new ArrayList<>();
+        return bookRepository.findByAuthorBook(authorName);
     }
 
     public List<Book> searchByGenre(String genreName) {
-        return new ArrayList<>();
-
+        return bookRepository.findByGenreBook(genreName);
     }
 
 }

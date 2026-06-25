@@ -14,11 +14,11 @@ public interface BookRepository {
 
     List<Book> findAllBooks();
 
-    // void findByGenreBook(String id); //devuelve todos sin filtrar
+    List<Book> findByGenreBook(String genreName);
 
-    // void findByAuthorBook(String id);
+    List<Book> findByAuthorBook(String authorName);
 
-    // void findByTitleBook(String id);
+    List<Book> findByTitleBook(String title);
 
 
 
