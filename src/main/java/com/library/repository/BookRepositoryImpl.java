@@ -41,7 +41,8 @@ public class BookRepositoryImpl implements BookRepository {
             if (this.connection == null) {
                 connection = DBManager.getConnection();
             }
-            stmn = connection.prepareStatement(sql);
+            connection.setAutoCommit(false);
+            stmn = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmn.setString(1, book.getIsbnCode());
             stmn.setString(2, book.getTitle());
             stmn.setString(3, book.getDescription());
@@ -59,16 +60,13 @@ public class BookRepositoryImpl implements BookRepository {
             for (Author author : book.getAuthors()) {
                 int authorId = 0;
 
-                // ¿Existe el autor?
                 PreparedStatement stmnCheckAuth = connection.prepareStatement(sqlCheckAuthor);
                 stmnCheckAuth.setString(1, author.getName());
                 ResultSet rsAuth = stmnCheckAuth.executeQuery();
 
                 if (rsAuth.next()) {
-                    // Si existe, tomamos su ID
                     authorId = rsAuth.getInt("id");
                 } else {
-                    // Si NO existe, lo creamos
                     PreparedStatement stmnInsAuth = connection.prepareStatement(sqlInsertAuthor,
                             Statement.RETURN_GENERATED_KEYS);
                     stmnInsAuth.setString(1, author.getName());
@@ -92,10 +90,8 @@ public class BookRepositoryImpl implements BookRepository {
                 ResultSet rsGen = stmnCheckGen.executeQuery();
 
                 if (rsGen.next()) {
-                    // Si existe, tomamos su ID
                     genreId = rsGen.getInt("id");
                 } else {
-                    // Si NO existe, lo creamos
                     PreparedStatement stmnInsGen = connection.prepareStatement(sqlInsertGenre,
                             Statement.RETURN_GENERATED_KEYS);
                     stmnInsGen.setString(1, genre.getName());
@@ -112,18 +108,23 @@ public class BookRepositoryImpl implements BookRepository {
                 stmnLinkGen.executeUpdate();
             }
 
+            connection.commit();
             System.out.println("Libro creado con exito");
         } catch (Exception e) {
             try {
-                if (connection != null)
-                    connection.rollback();
+                if (connection != null) connection.rollback();
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-                System.out.println("No se ha podido crear el libro");
-                System.out.println(e.getMessage());
-            } finally {
-                DBManager.closeConnection();
+                System.out.println("Error en rollback: " + ex.getMessage());
             }
+            System.out.println("No se ha podido crear el libro");
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) connection.setAutoCommit(true);
+            } catch (Exception e) {
+                // ignore
+            }
+            DBManager.closeConnection();
         }
 
     }
