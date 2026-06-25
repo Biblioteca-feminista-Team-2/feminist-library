@@ -1,6 +1,7 @@
 package com.library.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Builder;
@@ -18,6 +19,10 @@ public class Book {
     private int pages;
     private Boolean idState;
 
-    private List<Author> authors;
-    private List<Genre> genres;
+    @Builder.Default 
+    private List<Author> authors = new ArrayList<>();
+    
+    @Builder.Default 
+    private List<Genre> genres = new ArrayList<>();
+
 }
