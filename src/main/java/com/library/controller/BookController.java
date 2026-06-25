@@ -19,9 +19,13 @@ public class BookController {
         bookRepository.createBook(book);
     }
 
-    public List<Book> getAllBooks() {
-        List<Book> mockList = new ArrayList<>();
+    public List<Book> findAllBooks() {
+        List<Book> books= bookRepository.findAllBooks();
 
+        for(Book book:books){
+            book.setDescription("");
+        }
+        return books;
     }
 
     public void updateBook(Book book) {
