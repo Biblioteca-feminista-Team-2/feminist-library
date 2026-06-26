@@ -45,7 +45,7 @@ class BookRepositoryTest {
 
     @Test
     void createBook_shouldInsertAllFields() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(stmtBook);
+        when(connection.prepareStatement(anyString(), eq(Statement.RETURN_GENERATED_KEYS))).thenReturn(stmtBook);
         when(stmtBook.getGeneratedKeys()).thenReturn(rsBook);
         when(rsBook.next()).thenReturn(true);
         when(rsBook.getInt(1)).thenReturn(1);
@@ -74,8 +74,8 @@ class BookRepositoryTest {
 
     @Test
     void createBook_whenAuthorExists_shouldReuseId() throws Exception {
+        when(connection.prepareStatement(anyString(), eq(Statement.RETURN_GENERATED_KEYS))).thenReturn(stmtBook);
         when(connection.prepareStatement(anyString()))
-                .thenReturn(stmtBook)
                 .thenReturn(stmtCheckAuthor)
                 .thenReturn(stmtLinkAuthor);
         when(stmtBook.getGeneratedKeys()).thenReturn(rsBook);
@@ -105,12 +105,12 @@ class BookRepositoryTest {
 
     @Test
     void createBook_whenAuthorIsNew_shouldCreateIt() throws Exception {
-        when(connection.prepareStatement(anyString()))
+        when(connection.prepareStatement(anyString(), eq(Statement.RETURN_GENERATED_KEYS)))
                 .thenReturn(stmtBook)
+                .thenReturn(stmtInsertAuthor);
+        when(connection.prepareStatement(anyString()))
                 .thenReturn(stmtCheckAuthor)
                 .thenReturn(stmtLinkAuthor);
-        when(connection.prepareStatement(anyString(), eq(Statement.RETURN_GENERATED_KEYS)))
-                .thenReturn(stmtInsertAuthor);
         when(stmtBook.getGeneratedKeys()).thenReturn(rsBook);
         when(rsBook.next()).thenReturn(true);
         when(rsBook.getInt(1)).thenReturn(1);
@@ -138,12 +138,12 @@ class BookRepositoryTest {
 
     @Test
     void createBook_whenGenreIsNew_shouldCreateIt() throws Exception {
-        when(connection.prepareStatement(anyString()))
+        when(connection.prepareStatement(anyString(), eq(Statement.RETURN_GENERATED_KEYS)))
                 .thenReturn(stmtBook)
+                .thenReturn(stmtInsertGenre);
+        when(connection.prepareStatement(anyString()))
                 .thenReturn(stmtCheckGenre)
                 .thenReturn(stmtLinkGenre);
-        when(connection.prepareStatement(anyString(), eq(Statement.RETURN_GENERATED_KEYS)))
-                .thenReturn(stmtInsertGenre);
         when(stmtBook.getGeneratedKeys()).thenReturn(rsBook);
         when(rsBook.next()).thenReturn(true);
         when(rsBook.getInt(1)).thenReturn(1);
@@ -171,8 +171,8 @@ class BookRepositoryTest {
 
     @Test
     void createBook_withMultipleAuthorsAndGenres_shouldLinkAll() throws Exception {
+        when(connection.prepareStatement(anyString(), eq(Statement.RETURN_GENERATED_KEYS))).thenReturn(stmtBook);
         when(connection.prepareStatement(anyString()))
-                .thenReturn(stmtBook)
                 .thenReturn(stmtCheckAuthor).thenReturn(stmtLinkAuthor)
                 .thenReturn(stmtCheckAuthor).thenReturn(stmtLinkAuthor)
                 .thenReturn(stmtCheckGenre).thenReturn(stmtLinkGenre)
