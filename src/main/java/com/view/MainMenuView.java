@@ -49,7 +49,7 @@ public class MainMenuView {
         // Encabezado de Bienvenida (Rosa/Magenta)
         System.out.println("\n" + BRIGHT_PURPLE + "┌──────────────────────────────────────────────┐" + RESET);
         System.out.println(BRIGHT_PURPLE + "│ 📚 " + BOLD +  "BIBLIOTECA FEMINISTA DEL BARRIO" + RESET + BRIGHT_PURPLE + " 📚        │" + RESET);
-        System.out.println(BRIGHT_PURPLE + "│ Bienvenido de nuevo, Administradora          │" + RESET);
+        System.out.println(BRIGHT_PURPLE + "│ bienvenid@ de nuevo, Administradora          │" + RESET);
         System.out.println(BRIGHT_PURPLE + "└──────────────────────────────────────────────┘" + RESET);
 
         // Opciones del Menú Principal (Amarillo)

@@ -40,7 +40,7 @@ public class BookRepositoryImpl implements BookRepository {
         String sqlInsertGenre = "INSERT INTO genre (name) VALUES (?)";
         String sqlInsertBookGenre = "INSERT INTO book_genre (book_id, genre_id) VALUES (?, ?)";
         try {
-            if (this.connection == null) {
+            if (this.connection == null || this.connection.isClosed()) {
                 connection = DBManager.getConnection();
             }
             connection.setAutoCommit(false);
@@ -140,7 +140,7 @@ public class BookRepositoryImpl implements BookRepository {
         String sqlGenres = "SELECT g.* FROM genre g JOIN book_genre bg ON g.id = bg.genre_id WHERE bg.book_id = ?";
 
         try {
-            if (this.connection == null) {
+            if (this.connection == null || this.connection.isClosed()) {
                 connection = DBManager.getConnection();
             }
             stmn = connection.prepareStatement(sqlBooks);
@@ -213,7 +213,7 @@ public class BookRepositoryImpl implements BookRepository {
         String sqlDeleteBook = "DELETE FROM book WHERE id = ?";
 
         try {
-            if (this.connection == null) {
+            if (this.connection == null || this.connection.isClosed()) {
                 connection = DBManager.getConnection();
             }
             stmn = connection.prepareStatement(sqlDeleteBookAuthor);
@@ -286,7 +286,7 @@ public class BookRepositoryImpl implements BookRepository {
                 "JOIN genre g ON bg.genre_id = g.id " +
                 "WHERE LOWER(g.name) LIKE LOWER(?)";
         try {
-            if (this.connection == null) {
+            if (this.connection == null || this.connection.isClosed()) {
                 connection = DBManager.getConnection();
             }
             stmn = connection.prepareStatement(sql);
@@ -327,7 +327,7 @@ public class BookRepositoryImpl implements BookRepository {
                 "JOIN author a ON ba.author_id = a.id " +
                 "WHERE LOWER(a.name) LIKE LOWER(?)";
         try {
-            if (this.connection == null) {
+            if (this.connection == null || this.connection.isClosed()) {
                 connection = DBManager.getConnection();
             }
             stmn = connection.prepareStatement(sql);
@@ -365,7 +365,7 @@ public class BookRepositoryImpl implements BookRepository {
         List<Book> bookList = new ArrayList<>();
         String sql = "SELECT * FROM book WHERE LOWER(title) LIKE LOWER(?)";
         try {
-            if (this.connection == null) {
+            if (this.connection == null || this.connection.isClosed()) {
                 connection = DBManager.getConnection();
             }
             stmn = connection.prepareStatement(sql);
