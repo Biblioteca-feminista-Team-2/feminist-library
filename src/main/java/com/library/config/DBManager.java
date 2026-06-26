@@ -2,6 +2,7 @@ package com.library.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -10,10 +11,10 @@ public class DBManager {
 
     private static final String URL = dotenv.get("DB_URL");
     private static final String USER = dotenv.get("DB_USER");
-    private static final String PASS = dotenv.get("DB_PASSWORD");
+    private static final String PASS = dotenv.get("DB_PASS");
     private static Connection connection;
 
-    public static Connection getConnection(){
+    public static Connection getConnection() throws SQLException {
         try{ 
             System.out.println("Base de datos conectada");
             connection = DriverManager.getConnection(URL, USER, PASS);
