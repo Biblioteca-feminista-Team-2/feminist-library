@@ -9,6 +9,9 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Statement;
+import java.sql.Date;
+import java.time.LocalDate;
 
 import com.library.config.DBManager;
 import com.library.model.Author;
@@ -33,7 +36,6 @@ public class BookRepositoryImpl implements BookRepository {
         String sqlCheckAuthor = "SELECT id FROM author WHERE name = ?";
         String sqlInsertAuthor = "INSERT INTO author (name) VALUES (?)";
         String sqlInsertBookAuthor = "INSERT INTO book_author (book_id, author_id) VALUES (?, ?)";
-
         String sqlCheckGenre = "SELECT id FROM genre WHERE name = ?";
         String sqlInsertGenre = "INSERT INTO genre (name) VALUES (?)";
         String sqlInsertBookGenre = "INSERT INTO book_genre (book_id, genre_id) VALUES (?, ?)";
@@ -203,10 +205,6 @@ public class BookRepositoryImpl implements BookRepository {
 
         return bookList;
     }
-
-    // @Override
-    // public void updateBook(Book book) {
-    // }
 
     @Override
     public void deleteBook(int id) {
